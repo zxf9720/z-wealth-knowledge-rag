@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rag-app
+  template:
+    metadata:
+      labels:
+        app: rag-app
+    spec:
+      containers:
+        - name: rag-app
+          image: rag-app:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_AI_VECTORSTORE_QDRANT_HOST
+              value: qdrant
+            - name: SPRING_AI_VECTORSTORE_QDRANT_PORT
+              value: "6334"
+            - name: SPRING_AI_OLLAMA_BASE_URL
+              value: http://host.docker.internal:11434

@@ -1,11 +1,64 @@
-# Default ignored files
-/shelf/
-/.idea/workspace.xml
-# Editor-based HTTP Client requests
-/httpRequests/
-# Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
-# IntelliJ
+# =========================
+# Maven
+# =========================
+/target/
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+
+# =========================
+# IntelliJ IDEA
+# =========================
 .idea/
 *.iml
+out/
+
+# =========================
+# IDEA
+# =========================
+.idea/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Env / secrets
+# =========================
+.env
+.env.*
+
+# =========================
+# Spring Boot
+# =========================
+*.jar
+*.war
+*.ear
+
+# =========================
+# Temp / cache
+# =========================
+*.tmp
+*.swp
+*~
+
+# =========================
+# HTTP client (IntelliJ)
+# =========================
+.httpRequests/
+
+# =========================
+# Datasource (IntelliJ)
+# =========================
+.dataSources/
+.dataSources.local.xml
+
+# =========================
+# Misc
+# =========================
+/shelf/

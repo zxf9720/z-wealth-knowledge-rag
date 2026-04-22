@@ -1,0 +1,99 @@
+#spring:
+#  application:
+#    name: z-wealth-knowledge-rag
+#  ai:
+#    model:
+#      chat: ollama
+#    ollama:
+#      base-url: http://localhost:11434
+#      chat:
+#        options:
+#          model: gemma4
+#      embedding:
+#        options:
+#          model: nomic-embed-text
+#    vectorstore:
+#      qdrant:
+#        host: localhost
+#        port: 6334
+#        collection-name: wealth-rag
+#        initialize-schema: true
+#
+#server:
+#  port: 8081
+#
+
+
+
+spring:
+  application:
+    name: z-wealth-knowledge-rag
+  profiles:
+    active: dev
+
+  ai:
+    model:
+      chat: ollama
+
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: gemma4
+      embedding:
+        options:
+          model: nomic-embed-text
+
+    vectorstore:
+      qdrant:
+        host: localhost
+        port: 6334
+        collection-name: wealth-rag
+        initialize-schema: true
+
+server:
+  port: 8081
+
+# virtual threads
+  threads:
+    virtual:
+      enabled: true
+
+# logging
+logging:
+  file:
+    path: logs
+  level:
+    org.springframework.ai: DEBUG
+    org.springframework.web: INFO
+    org.springframework.web.client: DEBUG
+    root: INFO
+
+# actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,beans
+  endpoint:
+    health:
+      show-details: always
+
+# spring doc - swagger
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+#    enabled: false  -- disable on prod
+  api-docs:
+    path: /v3/api-docs
+#    enabled: false  -- disable on prod
+#  show-actuator: true
+
+# sql server setting
+#spring:
+#  datasource:
+#    url: jdbc:sqlserver://localhost:1433;databaseName=master
+#    username: sa
+#    password: YourStrong!Passw0rd
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+

@@ -1,59 +1,164 @@
 # z-wealth-knowledge-rag
 
-**Wealth Knowledge RAG (with agentic capabilities)**
+## Wealth Knowledge RAG System
 
-A Spring Boot-based Wealth Knowledge RAG (Retrieval-Augmented Generation) system designed for banking and financial scenarios.
+A production-style Retrieval-Augmented Generation (RAG) system built with Spring Boot, Spring AI, a vector database (Qdrant), and LLM integration.
 
-This project focuses on retrieving and grounding responses from large-scale policy and compliance documents, such as loan regulations, interest rates, and internal guidelines.
+This project is designed for banking and wealth management scenarios, focusing on accuracy, compliance, and explainability.
 
-On top of the RAG foundation, the system introduces lightweight agentic capabilities, including tool calling and request routing, to support tasks like summarization, comparison, and draft generation.
+---
+
+## Overview
+
+In financial systems, users require reliable answers based on policy and compliance documents such as loan regulations, interest rates, and internal guidelines.
+
+Traditional LLMs may produce hallucinated responses, which introduces risk in regulated environments.
+
+This system addresses the problem by combining:
+
+Retrieval (Vector Database) + Generation (LLM)
+
+It retrieves relevant knowledge from a controlled data source and generates grounded answers with traceable sources.
+
+In addition, the system includes lightweight tool capabilities such as summarization and comparison, enabling more task-oriented interactions beyond simple question answering.
+
+
+Core capabilities include:
+
+- Document ingestion and indexing
+- Vector-based retrieval
+- Grounded answer generation
+- Session-based conversational memory
 
 ---
 
 ## Problem
 
-In banking and wealth management scenarios, users need accurate answers based on policy and compliance documents.  
-Traditional LLMs may hallucinate without grounding in trusted data, which introduces risks in regulated environments.
+In banking environments:
+
+- Data must be accurate and auditable
+- Responses must be traceable
+- Hallucination must be minimized
+
+Using LLM alone:
+
+- Not grounded
+- Not auditable
+- High compliance risk
 
 ---
 
 ## Solution
 
-This project implements a RAG-based system that retrieves relevant policy documents and generates grounded answers with citations.
+This project implements a RAG-based architecture:
 
-It enhances the core RAG pipeline with agentic capabilities, enabling the system to:
-- Select appropriate tools based on user intent
-- Route requests dynamically (e.g., retrieval, summarization, comparison)
-- Support more flexible and task-oriented interactions
+User Question  
+→ Retrieve relevant documents (Vector DB)  
+→ Build grounded context  
+→ Generate answer (LLM)  
+→ Return answer with sources
+
+Key improvements:
+
+- Grounded responses instead of pure generation
+- Source attribution for auditability
+- Structured response handling (SUCCESS / NO_RESULT)
+
+If no relevant data is found, the system returns a controlled NO_RESULT response instead of allowing the model to hallucinate.
 
 ---
 
 ## Key Features
 
-- Document ingestion and intelligent chunking
-- Embedding and vector-based semantic search
-- Grounded answer generation with citations
-- Metadata filtering and latest-policy prioritization
-- Chat history and conversational context support
-- Lightweight agent-style tool calling (summarize / compare / draft)
-- Designed for future extension into a multi-agent compliance workflow
+### Document Ingestion
+
+- Supports TXT / MD / PDF / DOCX
+- Automatic chunking (approx. 500 characters)
+- Metadata enrichment (documentId, fileName, chunk range)
+- Local document bootstrap
+- Full lifecycle management:
+  - Upload
+  - List
+  - Delete (including vector cleanup)
+  - Reindex
+
+---
+
+### Retrieval and RAG
+
+- Vector-based semantic search
+- Top-K retrieval
+- Similarity threshold filtering
+- Metadata-based filtering
+- Prompt grounding with retrieved context
+- Source-aware responses
+
+---
+
+### Conversational Support
+
+- Session-based chat memory
+- Window-limited context (~20 messages)
+- Supports follow-up questions
+
+---
+
+### Lightweight Tool Capabilities
+
+- Summarize long policy or knowledge content into concise responses
+- Compare two text inputs to highlight key differences and similarities
+- Designed as task-oriented endpoints, which can evolve into internal agent tools
+
+---
+
+### API Layer
+
+- RESTful APIs
+- OpenAPI (Swagger) support
+- Postman-ready testing
+- Structured responses:
+  - SUCCESS
+  - NO_RESULT
+  - ERROR
 
 ---
 
 ## Architecture
 
-- **RAG Service**  
-  Handles document ingestion, embedding, and retrieval from vector storage
+### High-Level Flow
 
-- **LLM Layer**  
-  Generates grounded responses with citations based on retrieved context
+User  
+→ Controller Layer  
+→ Service Layer  
+→ Retrieval Layer  
+→ Vector Database  
+→ LLM
 
-- **Tool Layer (Agentic Capabilities)**  
-  Supports summarization, comparison, and draft generation via tool calling
+---
 
-- **Future Microservices (Planned)**
-    - Customer Data Service (Agent B)
-    - Compliance Review Service (Agent C)
+### Detailed Architecture
+
+Client / Postman  
+→ Controllers
+- ChatController
+- DocumentController
+- RagController
+- ToolController
+
+→ Services
+- ChatService
+- DocumentService
+- RagService
+- ToolService
+
+→ Core Components
+- ChatClient (Spring AI)
+- ChatMemory (session-based)
+- VectorStore
+
+→ Storage
+- Vector Database (Qdrant)
+- InMemoryDocumentRepository
 
 ---
 
@@ -62,17 +167,22 @@ It enhances the core RAG pipeline with agentic capabilities, enabling the system
 - Java 21
 - Spring Boot 3.5.x
 - Spring AI 1.1.x
-- Vector Database (e.g., Redis / Qdrant)
-- RESTful APIs
+- Qdrant (Vector Database)
+- REST APIs
+- Swagger / OpenAPI
 
 ---
 
 ## Future Roadmap
 
-- Add Customer Data API Service (Agent B) - z-customer-data-service
-- Add Compliance Review Service (Agent C) - z-compliance-review-service
+- Customer Data API Service (Agent B) - z-customer-data-service
+- Compliance Review Service (Agent C) - z-compliance-review-service
 - Introduce policy-to-customer data comparison for compliance checks
 - Evolve into a multi-agent compliance workflow
+- Kafka-based asynchronous ingestion
+- Redis caching for low latency
+- Hybrid search and reranking
+- Persistent document storage
 
 ---
 
@@ -80,6 +190,4 @@ It enhances the core RAG pipeline with agentic capabilities, enabling the system
 
 ```bash
 mvn spring-boot:run
-
-
-
+```

@@ -201,7 +201,7 @@ public class RagLoadService {
 //        return chunks;
 //    }
 
-    public String loadAllFiles() throws IOException {
+    public String loadAllTxtFiles() throws IOException {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Resource[] resources = resolver.getResources("classpath:docs/*.txt");
 

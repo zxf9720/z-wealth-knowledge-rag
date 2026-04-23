@@ -1,14 +1,23 @@
-package com.shawn.wealth.rag.dto;
+package com.shawn.wealth.rag.rag.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * Request object for RAG (Retrieval-Augmented Generation) operations.
- *
- * The sessionId represents a unique conversation context and is used to isolate ChatMemory
- * across different users or sessions. This ensures that each conversation maintains its own
- * context and prevents message leakage between users.
- *
- * The question field contains the user query that will be processed by the RAG pipeline,
- * including retrieval from the vector store and response generation by the LLM.
+ * Request object for RAG queries.
  */
-public record RagRequest(String sessionId, String question) {
+@Schema(name = "RagRequest", description = "Request payload for retrieval-augmented generation")
+public record RagRequest(
+
+        @Schema(
+                description = "Unique conversation identifier used to isolate chat memory",
+                example = "test-session-1"
+        )
+        String sessionId,
+
+        @Schema(
+                description = "User question to be answered using retrieved context",
+                example = "What is TFSA?"
+        )
+        String question
+) {
 }

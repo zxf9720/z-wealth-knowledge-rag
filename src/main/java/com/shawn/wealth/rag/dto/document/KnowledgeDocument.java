@@ -1,4 +1,4 @@
-package com.shawn.wealth.rag.document;
+package com.shawn.wealth.rag.dto.document;
 
 import java.time.LocalDateTime;
 import java.util.Map;

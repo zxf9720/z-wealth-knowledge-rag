@@ -89,6 +89,13 @@ springdoc:
 #    enabled: false  -- disable on prod
 #  show-actuator: true
 
+
+services:
+  customer-data:
+    base-url: http://localhost:8082
+  compliance-review:
+    base-url: http://localhost:8083
+
 # sql server setting
 #spring:
 #  datasource:

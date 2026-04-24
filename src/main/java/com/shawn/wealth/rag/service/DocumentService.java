@@ -1,9 +1,9 @@
 package com.shawn.wealth.rag.service;
 
-import com.shawn.wealth.rag.document.dto.BootstrapResponse;
-import com.shawn.wealth.rag.document.dto.DocumentResponse;
-import com.shawn.wealth.rag.document.dto.IngestResponse;
-import com.shawn.wealth.rag.document.dto.TextIngestRequest;
+import com.shawn.wealth.rag.dto.document.BootstrapResponse;
+import com.shawn.wealth.rag.dto.document.DocumentResponse;
+import com.shawn.wealth.rag.dto.document.IngestResponse;
+import com.shawn.wealth.rag.dto.document.TextIngestRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

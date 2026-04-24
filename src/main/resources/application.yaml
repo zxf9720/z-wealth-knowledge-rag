@@ -43,6 +43,15 @@ spring:
       embedding:
         options:
           model: nomic-embed-text
+    mcp:
+      client:
+        enabled: true
+        toolcallback:
+          enabled: true
+        sse:
+          connections:
+            market-rate-server:
+              url: http://localhost:8084
 
     vectorstore:
       qdrant:

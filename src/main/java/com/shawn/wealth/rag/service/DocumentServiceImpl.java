@@ -1,10 +1,10 @@
 package com.shawn.wealth.rag.service;
 
-import com.shawn.wealth.rag.document.KnowledgeDocument;
-import com.shawn.wealth.rag.document.dto.BootstrapResponse;
-import com.shawn.wealth.rag.document.dto.DocumentResponse;
-import com.shawn.wealth.rag.document.dto.IngestResponse;
-import com.shawn.wealth.rag.document.dto.TextIngestRequest;
+import com.shawn.wealth.rag.dto.document.KnowledgeDocument;
+import com.shawn.wealth.rag.dto.document.BootstrapResponse;
+import com.shawn.wealth.rag.dto.document.DocumentResponse;
+import com.shawn.wealth.rag.dto.document.IngestResponse;
+import com.shawn.wealth.rag.dto.document.TextIngestRequest;
 import com.shawn.wealth.rag.repository.InMemoryDocumentRepository;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;

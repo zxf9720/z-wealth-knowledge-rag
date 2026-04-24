@@ -1,6 +1,6 @@
 package com.shawn.wealth.rag.repository;
 
-import com.shawn.wealth.rag.document.KnowledgeDocument;
+import com.shawn.wealth.rag.dto.document.KnowledgeDocument;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

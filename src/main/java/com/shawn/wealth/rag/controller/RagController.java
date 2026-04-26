@@ -1,7 +1,7 @@
 package com.shawn.wealth.rag.controller;
 
-import com.shawn.wealth.rag.rag.dto.RagRequest;
-import com.shawn.wealth.rag.rag.dto.RagResponse;
+import com.shawn.wealth.rag.dto.RagRequest;
+import com.shawn.wealth.rag.dto.RagResponse;
 import com.shawn.wealth.rag.service.RagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

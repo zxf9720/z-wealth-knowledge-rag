@@ -1,14 +1,14 @@
 package com.shawn.wealth.rag.service;
 
-import com.shawn.wealth.rag.rag.dto.RagRequest;
-import com.shawn.wealth.rag.rag.dto.RagResponse;
-import com.shawn.wealth.rag.rag.dto.SourceItem;
+import com.shawn.wealth.rag.dto.RagRequest;
+import com.shawn.wealth.rag.dto.RagResponse;
 import com.shawn.wealth.rag.dto.agent.AgentRequest;
 import com.shawn.wealth.rag.dto.agent.AgentResponse;
 import com.shawn.wealth.rag.dto.agent.IntentType;
 import com.shawn.wealth.rag.dto.agent.ToolType;
 import com.shawn.wealth.rag.dto.tool.CompareResponse;
 import com.shawn.wealth.rag.dto.tool.SummarizeResponse;
+import com.shawn.wealth.rag.rag.dto.SourceItem;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;

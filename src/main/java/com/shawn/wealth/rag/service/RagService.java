@@ -1,7 +1,7 @@
 package com.shawn.wealth.rag.service;
 
-import com.shawn.wealth.rag.rag.dto.RagRequest;
-import com.shawn.wealth.rag.rag.dto.RagResponse;
+import com.shawn.wealth.rag.dto.RagRequest;
+import com.shawn.wealth.rag.dto.RagResponse;
 import com.shawn.wealth.rag.rag.dto.SourceItem;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;

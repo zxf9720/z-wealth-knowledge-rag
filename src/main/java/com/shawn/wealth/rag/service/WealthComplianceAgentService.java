@@ -1,12 +1,12 @@
 package com.shawn.wealth.rag.service;
 
-import com.shawn.wealth.rag.rag.dto.RagRequest;
-import com.shawn.wealth.rag.rag.dto.RagResponse;
+import com.shawn.wealth.rag.dto.RagRequest;
+import com.shawn.wealth.rag.dto.RagResponse;
+import com.shawn.wealth.rag.dto.agent.WealthComplianceRequest;
+import com.shawn.wealth.rag.dto.agent.WealthComplianceResponse;
 import com.shawn.wealth.rag.dto.external.ComplianceCheckRequest;
 import com.shawn.wealth.rag.dto.external.ComplianceCheckResponse;
 import com.shawn.wealth.rag.dto.external.CustomerProfileResponse;
-import com.shawn.wealth.rag.dto.agent.WealthComplianceRequest;
-import com.shawn.wealth.rag.dto.agent.WealthComplianceResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;

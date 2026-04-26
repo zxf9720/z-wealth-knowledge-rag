@@ -1,4 +1,4 @@
-package com.shawn.wealth.rag.rag.dto;
+package com.shawn.wealth.rag.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -1,164 +1,56 @@
 # z-wealth-knowledge-rag
 
-## Wealth Knowledge RAG System
-
-A production-style Retrieval-Augmented Generation (RAG) system built with Spring Boot, Spring AI, a vector database (Qdrant), and LLM integration.
-
-This project is designed for banking and wealth management scenarios, focusing on accuracy, compliance, and explainability.
-
----
-
 ## Overview
 
-In financial systems, users require reliable answers based on policy and compliance documents such as loan regulations, interest rates, and internal guidelines.
+z-wealth-knowledge-rag is a Spring Boot–based Retrieval-Augmented Generation (RAG) service for wealth management.
 
-Traditional LLMs may produce hallucinated responses, which introduces risk in regulated environments.
+It acts as **Agent A (Orchestrator)** in a multi-agent GenAI system and is responsible for:
 
-This system addresses the problem by combining:
-
-Retrieval (Vector Database) + Generation (LLM)
-
-It retrieves relevant knowledge from a controlled data source and generates grounded answers with traceable sources.
-
-In addition, the system includes lightweight tool capabilities such as summarization and comparison, enabling more task-oriented interactions beyond simple question answering.
-
-
-Core capabilities include:
-
-- Document ingestion and indexing
-- Vector-based retrieval
-- Grounded answer generation
-- Session-based conversational memory
-
----
-
-## Problem
-
-In banking environments:
-
-- Data must be accurate and auditable
-- Responses must be traceable
-- Hallucination must be minimized
-
-Using LLM alone:
-
-- Not grounded
-- Not auditable
-- High compliance risk
-
----
-
-## Solution
-
-This project implements a RAG-based architecture:
-
-User Question  
-→ Retrieve relevant documents (Vector DB)  
-→ Build grounded context  
-→ Generate answer (LLM)  
-→ Return answer with sources
-
-Key improvements:
-
-- Grounded responses instead of pure generation
-- Source attribution for auditability
-- Structured response handling (SUCCESS / NO_RESULT)
-
-If no relevant data is found, the system returns a controlled NO_RESULT response instead of allowing the model to hallucinate.
-
----
-
-## Key Features
-
-### Document Ingestion
-
-- Supports TXT / MD / PDF / DOCX
-- Automatic chunking (approx. 500 characters)
-- Metadata enrichment (documentId, fileName, chunk range)
-- Local document bootstrap
-- Full lifecycle management:
-  - Upload
-  - List
-  - Delete (including vector cleanup)
-  - Reindex
-
----
-
-### Retrieval and RAG
-
-- Vector-based semantic search
-- Top-K retrieval
-- Similarity threshold filtering
-- Metadata-based filtering
-- Prompt grounding with retrieved context
-- Source-aware responses
-
----
-
-### Conversational Support
-
-- Session-based chat memory
-- Window-limited context (~20 messages)
-- Supports follow-up questions
-
----
-
-### Lightweight Tool Capabilities
-
-- Summarize long policy or knowledge content into concise responses
-- Compare two text inputs to highlight key differences and similarities
-- Designed as task-oriented endpoints, which can evolve into internal agent tools
-
----
-
-### API Layer
-
-- RESTful APIs
-- OpenAPI (Swagger) support
-- Postman-ready testing
-- Structured responses:
-  - SUCCESS
-  - NO_RESULT
-  - ERROR
+- RAG-based question answering
+- Document ingestion and vector indexing
+- Tool routing (summarize, compare)
+- Multi-agent orchestration (Agent B & Agent C)
+- MCP tool integration
+- Async compliance workflows via Kafka
 
 ---
 
 ## Architecture
 
-### High-Level Flow
+```text
+                +-----------------------------+
+                | z-wealth-knowledge-rag      |
+                | (Agent A - Orchestrator)    |
+                +-------------+---------------+
+                              |
+        +---------------------+----------------------+
+        |                     |                      |
+        v                     v                      v
+Customer Service      Compliance Service        MCP Server
+(Agent B)             (Agent C)                 (External Tool)
+:8082                 :8083                     :8084
 
-User  
-→ Controller Layer  
-→ Service Layer  
-→ Retrieval Layer  
-→ Vector Database  
-→ LLM
+External Systems:
+- Qdrant (Vector DB)
+- Redis (Short-term memory)
+- MongoDB (History)
+- Kafka (Async events)
+- Ollama / OpenAI (LLM)
+```
 
 ---
 
-### Detailed Architecture
+## Core Capabilities
 
-Client / Postman  
-→ Controllers
-- ChatController
-- DocumentController
-- RagController
-- ToolController
-
-→ Services
-- ChatService
-- DocumentService
-- RagService
-- ToolService
-
-→ Core Components
-- ChatClient (Spring AI)
-- ChatMemory (session-based)
-- VectorStore
-
-→ Storage
-- Vector Database (Qdrant)
-- InMemoryDocumentRepository
+- RAG with Qdrant vector search
+- Document ingestion (TXT, MD, PDF, DOCX)
+- Source-grounded answers
+- Tool routing (summarize, compare)
+- Multi-agent orchestration
+- Kafka-based async compliance flow
+- Non-blocking orchestration (WebClient)
+- MCP tool integration
+- Swagger/OpenAPI
 
 ---
 
@@ -166,23 +58,28 @@ Client / Postman
 
 - Java 21
 - Spring Boot 3.5.x
-- Spring AI 1.1.x
-- Qdrant (Vector Database)
-- REST APIs
-- Swagger / OpenAPI
+- Spring AI
+- Ollama / OpenAI
+- Qdrant
+- Redis
+- MongoDB
+- Kafka
+- Maven
+- JaCoCo
 
 ---
 
-## Future Roadmap
+## Runtime Defaults
 
-- Customer Data API Service (Agent B) - z-customer-data-service
-- Compliance Review Service (Agent C) - z-compliance-review-service
-- Introduce policy-to-customer data comparison for compliance checks
-- Evolve into a multi-agent compliance workflow
-- Kafka-based asynchronous ingestion
-- Redis caching for low latency
-- Hybrid search and reranking
-- Persistent document storage
+- App: http://localhost:8081
+- Ollama: http://localhost:11434
+- Qdrant: localhost:6334
+- Redis: localhost:6379
+- MongoDB: mongodb://localhost:27017/wealth_rag
+- Kafka: localhost:9092
+- Agent B: http://localhost:8082
+- Agent C: http://localhost:8083
+- MCP: http://localhost:8084
 
 ---
 
@@ -191,3 +88,111 @@ Client / Postman
 ```bash
 mvn spring-boot:run
 ```
+
+Swagger:
+
+```text
+http://localhost:8081/swagger-ui.html
+```
+
+---
+
+## API Overview
+
+### RAG
+
+```http
+POST /rag/ask
+```
+
+```json
+{
+  "sessionId": "s1",
+  "question": "What is TFSA?"
+}
+```
+
+---
+
+### Documents
+
+- POST /documents/upload
+- POST /documents/bootstrap
+- GET /documents
+- DELETE /documents/{id}
+
+---
+
+### Tools
+
+- POST /tools/summarize
+- POST /tools/compare
+
+---
+
+### Agent Routing
+
+```http
+POST /agent/ask
+```
+
+---
+
+### Orchestration
+
+```http
+POST /agent/orchestration/ask
+GET /agent/orchestration/requests/{requestId}
+```
+
+---
+
+### Compliance
+
+- POST /agent/compliance/review
+- POST /agent/nonblocking/compliance/review
+
+---
+
+## Multi-Agent Flow
+
+```text
+User → Agent A → Kafka → Agent C → Agent B → LLM
+```
+
+---
+
+## Design Principles
+
+- Stateless orchestration
+- Rule-based decision, LLM explanation
+- Kafka decoupling
+- MCP external tools
+- Grounded RAG (NO_RESULT fallback)
+
+---
+
+## Storage
+
+| Component | Purpose |
+|----------|--------|
+| Qdrant | vector search |
+| Redis | short-term memory |
+| MongoDB | history |
+| Kafka | async messaging |
+
+---
+
+## Testing
+
+```bash
+mvn verify
+```
+
+Report:
+
+```text
+target/site/jacoco/index.html
+```
+
+---

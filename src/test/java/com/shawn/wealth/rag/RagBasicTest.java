@@ -1,34 +1,34 @@
 package com.shawn.wealth.rag;
 
+import com.shawn.wealth.rag.dto.RagRequest;
+import com.shawn.wealth.rag.dto.RagResponse;
+import com.shawn.wealth.rag.rag.dto.SourceItem;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.ai.document.Document;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Map;
 import java.util.List;
 
-@SpringBootTest
+import static org.assertj.core.api.Assertions.assertThat;
+
 class RagBasicTest {
 
-    @Autowired
-    private EmbeddingModel embeddingModel;
-
-    @Autowired
-    private VectorStore vectorStore;
-
     @Test
-    void testEmbedding() {
-        float[] vector = embeddingModel.embed("hello world");
-        System.out.println("Vector size = " + vector.length);
+    void ragRequestStoresSessionAndQuestion() {
+        RagRequest request = new RagRequest("session-1", "What is a TFSA?");
+
+        assertThat(request.sessionId()).isEqualTo("session-1");
+        assertThat(request.question()).isEqualTo("What is a TFSA?");
     }
 
     @Test
-    void testVectorStore() {
-        vectorStore.add(List.of(
-                new Document("TFSA is a tax-free savings account in Canada.")
-        ));
-        System.out.println("Insert success");
+    void ragResponseStoresAnswerSourcesAndMessage() {
+        SourceItem source = new SourceItem("TFSA content", Map.of("fileName", "tfsa.txt"));
+
+        RagResponse response = new RagResponse("SUCCESS", "Hi! answer", List.of(source), null);
+
+        assertThat(response.status()).isEqualTo("SUCCESS");
+        assertThat(response.answer()).isEqualTo("Hi! answer");
+        assertThat(response.sources()).containsExactly(source);
+        assertThat(response.message()).isNull();
     }
 }

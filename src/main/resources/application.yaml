@@ -1,0 +1,110 @@
+
+spring:
+  application:
+    name: z-wealth-knowledge-rag
+  profiles:
+    active: dev
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+    mongodb:
+      uri: mongodb://localhost:27017/wealth_rag
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: wealth-rag-agent-a
+      auto-offset-reset: earliest
+    producer:
+      acks: all
+
+  ai:
+    model:
+      chat: ollama
+
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: gemma4
+      embedding:
+        options:
+          model: nomic-embed-text
+    mcp:
+      client:
+        enabled: true
+        toolcallback:
+          enabled: true
+        sse:
+          connections:
+            market-rate-server:
+              url: http://localhost:8084
+
+    vectorstore:
+      qdrant:
+        host: localhost
+        port: 6334
+        collection-name: wealth-rag
+        initialize-schema: true
+
+server:
+  port: 8081
+
+# virtual threads
+  threads:
+    virtual:
+      enabled: true
+
+# logging
+logging:
+  file:
+    path: logs
+  level:
+    org.springframework.ai: DEBUG
+    org.springframework.web: INFO
+    org.springframework.web.client: DEBUG
+    root: INFO
+
+# actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,beans
+  endpoint:
+    health:
+      show-details: always
+
+# spring doc - swagger
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+#    enabled: false  -- disable on prod
+  api-docs:
+    path: /v3/api-docs
+#    enabled: false  -- disable on prod
+#  show-actuator: true
+
+services:
+  customer-data:
+    base-url: http://localhost:8082
+  compliance-review:
+    base-url: http://localhost:8083
+
+app:
+  kafka:
+    topics:
+      compliance-requested: wealth.compliance.review.requested
+      compliance-completed: wealth.compliance.review.completed
+
+# sql server setting
+#spring:
+#  datasource:
+#    url: jdbc:sqlserver://localhost:1433;databaseName=master
+#    username: sa
+#    password: YourStrong!Passw0rd
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+

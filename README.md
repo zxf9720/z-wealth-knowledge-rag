@@ -1,59 +1,56 @@
 # z-wealth-knowledge-rag
 
-**Wealth Knowledge RAG (with agentic capabilities)**
+## Overview
 
-A Spring Boot-based Wealth Knowledge RAG (Retrieval-Augmented Generation) system designed for banking and financial scenarios.
+z-wealth-knowledge-rag is a Spring Boot–based Retrieval-Augmented Generation (RAG) service for wealth management.
 
-This project focuses on retrieving and grounding responses from large-scale policy and compliance documents, such as loan regulations, interest rates, and internal guidelines.
+It acts as **Agent A (Orchestrator)** in a multi-agent GenAI system and is responsible for:
 
-On top of the RAG foundation, the system introduces lightweight agentic capabilities, including tool calling and request routing, to support tasks like summarization, comparison, and draft generation.
-
----
-
-## Problem
-
-In banking and wealth management scenarios, users need accurate answers based on policy and compliance documents.  
-Traditional LLMs may hallucinate without grounding in trusted data, which introduces risks in regulated environments.
-
----
-
-## Solution
-
-This project implements a RAG-based system that retrieves relevant policy documents and generates grounded answers with citations.
-
-It enhances the core RAG pipeline with agentic capabilities, enabling the system to:
-- Select appropriate tools based on user intent
-- Route requests dynamically (e.g., retrieval, summarization, comparison)
-- Support more flexible and task-oriented interactions
-
----
-
-## Key Features
-
-- Document ingestion and intelligent chunking
-- Embedding and vector-based semantic search
-- Grounded answer generation with citations
-- Metadata filtering and latest-policy prioritization
-- Chat history and conversational context support
-- Lightweight agent-style tool calling (summarize / compare / draft)
-- Designed for future extension into a multi-agent compliance workflow
+- RAG-based question answering
+- Document ingestion and vector indexing
+- Tool routing (summarize, compare)
+- Multi-agent orchestration (Agent B & Agent C)
+- MCP tool integration
+- Async compliance workflows via Kafka
 
 ---
 
 ## Architecture
 
-- **RAG Service**  
-  Handles document ingestion, embedding, and retrieval from vector storage
+```text
+                +-----------------------------+
+                | z-wealth-knowledge-rag      |
+                | (Agent A - Orchestrator)    |
+                +-------------+---------------+
+                              |
+        +---------------------+----------------------+
+        |                     |                      |
+        v                     v                      v
+Customer Service      Compliance Service        MCP Server
+(Agent B)             (Agent C)                 (External Tool)
+:8082                 :8083                     :8084
 
-- **LLM Layer**  
-  Generates grounded responses with citations based on retrieved context
+External Systems:
+- Qdrant (Vector DB)
+- Redis (Short-term memory)
+- MongoDB (History)
+- Kafka (Async events)
+- Ollama / OpenAI (LLM)
+```
 
-- **Tool Layer (Agentic Capabilities)**  
-  Supports summarization, comparison, and draft generation via tool calling
+---
 
-- **Future Microservices (Planned)**
-    - Customer Data Service (Agent B)
-    - Compliance Review Service (Agent C)
+## Core Capabilities
+
+- RAG with Qdrant vector search
+- Document ingestion (TXT, MD, PDF, DOCX)
+- Source-grounded answers
+- Tool routing (summarize, compare)
+- Multi-agent orchestration
+- Kafka-based async compliance flow
+- Non-blocking orchestration (WebClient)
+- MCP tool integration
+- Swagger/OpenAPI
 
 ---
 
@@ -61,18 +58,28 @@ It enhances the core RAG pipeline with agentic capabilities, enabling the system
 
 - Java 21
 - Spring Boot 3.5.x
-- Spring AI 1.1.x
-- Vector Database (e.g., Redis / Qdrant)
-- RESTful APIs
+- Spring AI
+- Ollama / OpenAI
+- Qdrant
+- Redis
+- MongoDB
+- Kafka
+- Maven
+- JaCoCo
 
 ---
 
-## Future Roadmap
+## Runtime Defaults
 
-- Add Customer Data API Service (Agent B) - z-customer-data-service
-- Add Compliance Review Service (Agent C) - z-compliance-review-service
-- Introduce policy-to-customer data comparison for compliance checks
-- Evolve into a multi-agent compliance workflow
+- App: http://localhost:8081
+- Ollama: http://localhost:11434
+- Qdrant: localhost:6334
+- Redis: localhost:6379
+- MongoDB: mongodb://localhost:27017/wealth_rag
+- Kafka: localhost:9092
+- Agent B: http://localhost:8082
+- Agent C: http://localhost:8083
+- MCP: http://localhost:8084
 
 ---
 
@@ -80,6 +87,112 @@ It enhances the core RAG pipeline with agentic capabilities, enabling the system
 
 ```bash
 mvn spring-boot:run
+```
 
+Swagger:
 
+```text
+http://localhost:8081/swagger-ui.html
+```
 
+---
+
+## API Overview
+
+### RAG
+
+```http
+POST /rag/ask
+```
+
+```json
+{
+  "sessionId": "s1",
+  "question": "What is TFSA?"
+}
+```
+
+---
+
+### Documents
+
+- POST /documents/upload
+- POST /documents/bootstrap
+- GET /documents
+- DELETE /documents/{id}
+
+---
+
+### Tools
+
+- POST /tools/summarize
+- POST /tools/compare
+
+---
+
+### Agent Routing
+
+```http
+POST /agent/ask
+```
+
+---
+
+### Orchestration
+
+```http
+POST /agent/orchestration/ask
+GET /agent/orchestration/requests/{requestId}
+```
+
+---
+
+### Compliance
+
+- POST /agent/compliance/review
+- POST /agent/nonblocking/compliance/review
+
+---
+
+## Multi-Agent Flow
+
+```text
+User → Agent A → Kafka → Agent C → Agent B → LLM
+```
+
+---
+
+## Design Principles
+
+- Stateless orchestration
+- Rule-based decision, LLM explanation
+- Kafka decoupling
+- MCP external tools
+- Grounded RAG (NO_RESULT fallback)
+
+---
+
+## Storage
+
+| Component | Purpose |
+|----------|--------|
+| Qdrant | vector search |
+| Redis | short-term memory |
+| MongoDB | history |
+| Kafka | async messaging |
+
+---
+
+## Testing
+
+```bash
+mvn verify
+```
+
+Report:
+
+```text
+target/site/jacoco/index.html
+```
+
+---

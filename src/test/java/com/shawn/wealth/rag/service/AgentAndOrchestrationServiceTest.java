@@ -1,6 +1,6 @@
 package com.shawn.wealth.rag.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.shawn.wealth.rag.dto.RagRequest;
 import com.shawn.wealth.rag.dto.RagResponse;
 import com.shawn.wealth.rag.dto.agent.AgentIntent;

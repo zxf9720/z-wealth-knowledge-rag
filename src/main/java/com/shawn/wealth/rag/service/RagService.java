@@ -71,11 +71,9 @@ public class RagService {
 
         String answer = chatClient.prompt()
                 .system("You are a banking assistant. Answer briefly and start with 'Hi!'.")
-                .advisors(
-                        MessageChatMemoryAdvisor.builder(chatMemory)
-                                .conversationId(request.sessionId())
-                                .build()
-                )
+                .advisors(advisor -> advisor
+                        .advisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                        .param(ChatMemory.CONVERSATION_ID, request.sessionId()))
                 .user(userPrompt)
                 .call()
                 .content();

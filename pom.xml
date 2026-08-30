@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.14</version>
+		<version>4.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.shawn</groupId>
@@ -27,8 +27,8 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>21</java.version>
-		<spring-ai.version>1.0.5</spring-ai.version>
+		<java.version>25</java.version>
+		<spring-ai.version>2.0.0</spring-ai.version>
 	</properties>
 
 	<!-- BOM（version management)-->
@@ -122,14 +122,14 @@
 		<!-- RAG advisor -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-advisors-vector-store</artifactId>
+			<artifactId>spring-ai-vector-store-advisor</artifactId>
 		</dependency>
 
 		<!-- Spring Doc -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.8.17</version>
+			<version>3.0.2</version>
 		</dependency>
 
 		<dependency>

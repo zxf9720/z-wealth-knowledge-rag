@@ -38,10 +38,11 @@ spring:
         enabled: true
         toolcallback:
           enabled: true
-        sse:
+        streamable-http:
           connections:
             market-rate-server:
               url: http://localhost:8084
+              endpoint: /mcp
 
     vectorstore:
       qdrant:
@@ -107,4 +108,3 @@ app:
 #    username: sa
 #    password: YourStrong!Passw0rd
 #    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-

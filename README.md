@@ -56,9 +56,11 @@ External Systems:
 
 ## Tech Stack
 
-- Java 21
-- Spring Boot 3.5.x
-- Spring AI
+- Java 25
+- Spring Boot 4.1.0
+- Spring AI 2.0.0
+- Spring AI MCP client (Stateless Streamable HTTP)
+- springdoc-openapi 3.0.2
 - Ollama / OpenAI
 - Qdrant
 - Redis
@@ -66,6 +68,7 @@ External Systems:
 - Kafka
 - Maven
 - JaCoCo
+- Docker (Eclipse Temurin Java 25 JRE)
 
 ---
 
@@ -79,15 +82,37 @@ External Systems:
 - Kafka: localhost:9092
 - Agent B: http://localhost:8082
 - Agent C: http://localhost:8083
-- MCP: http://localhost:8084
+- MCP server: http://localhost:8084/mcp (stateless Streamable HTTP)
+
+---
+
+## Requirements
+
+- JDK 25
+- A stateless MCP server exposing the Streamable HTTP endpoint at `http://localhost:8084/mcp`
+- Ollama, Qdrant, Redis, MongoDB, and Kafka using the endpoints listed above
+
+The MCP SDK version is managed by the Spring AI 2.0.0 BOM. The client uses
+Streamable HTTP rather than the deprecated SSE transport and is compatible
+with a stateless MCP server.
 
 ---
 
 ## Run
 
 ```bash
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
+
+Build the Java 25 runtime image after packaging the application:
+
+```bash
+./mvnw clean package
+docker build -t z-wealth-knowledge-rag .
+```
+
+When running the container locally, override the configured `localhost`
+dependency endpoints with Docker-accessible hostnames or service names.
 
 Swagger:
 
@@ -186,7 +211,7 @@ User → Agent A → Kafka → Agent C → Agent B → LLM
 ## Testing
 
 ```bash
-mvn verify
+./mvnw verify
 ```
 
 Report:

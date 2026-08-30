@@ -1,6 +1,6 @@
 package com.shawn.wealth.rag.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.shawn.wealth.rag.dto.RagRequest;
 import com.shawn.wealth.rag.dto.RagResponse;
 import com.shawn.wealth.rag.dto.agent.AgentIntent;
@@ -293,7 +293,7 @@ class AgentAndOrchestrationServiceTest {
         @Override public ChatClient.Builder defaultAdvisors(Advisor... advisors) { return this; }
         @Override public ChatClient.Builder defaultAdvisors(Consumer<ChatClient.AdvisorSpec> consumer) { return this; }
         @Override public ChatClient.Builder defaultAdvisors(List<Advisor> advisors) { return this; }
-        @Override public ChatClient.Builder defaultOptions(ChatOptions chatOptions) { return this; }
+        @Override public ChatClient.Builder defaultOptions(ChatOptions.Builder chatOptions) { return this; }
         @Override public ChatClient.Builder defaultUser(String text) { return this; }
         @Override public ChatClient.Builder defaultUser(Resource text, Charset charset) { return this; }
         @Override public ChatClient.Builder defaultUser(Resource text) { return this; }
@@ -303,7 +303,6 @@ class AgentAndOrchestrationServiceTest {
         @Override public ChatClient.Builder defaultSystem(Resource text) { return this; }
         @Override public ChatClient.Builder defaultSystem(Consumer<ChatClient.PromptSystemSpec> consumer) { return this; }
         @Override public ChatClient.Builder defaultTemplateRenderer(TemplateRenderer templateRenderer) { return this; }
-        @Override public ChatClient.Builder defaultToolNames(String... toolNames) { return this; }
         @Override public ChatClient.Builder defaultTools(Object... tools) { return this; }
         @Override public ChatClient.Builder defaultToolCallbacks(ToolCallback... toolCallbacks) { return this; }
         @Override public ChatClient.Builder defaultToolCallbacks(List<ToolCallback> toolCallbacks) { return this; }
